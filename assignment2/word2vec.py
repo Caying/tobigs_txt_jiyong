@@ -57,14 +57,14 @@ def naiveSoftmaxLossAndGradient(
     ### Please use the provided softmax function (imported earlier in this file) - softmax
     ### This numerically stable implementation helps you avoid issues pertaining
     ### to integer overflow. 
-    yhat = softmax(np.dot(outsideVectors, centerWordVec))
-    loss = - np.log(yhat[outsideWordIdx])
+    yhat = softmax(np.dot(outsideVectors, centerWordVec))  # softmax(u_o * v_c)
+    loss = - np.log(yhat[outsideWordIdx]) # - log(yhat_o)
 
     m_yhat = yhat
     m_yhat[outsideWordIdx] -= 1 # yhat - y
-    gradCenterVec = outsideVectors.T.dot(m_yhat)
+    gradCenterVec = outsideVectors.T.dot(m_yhat) # dJ / dv_c => U*(yhat-y)
     
-    gradOutsideVecs = m_yhat[:, np.newaxis].dot(np.array([centerWordVec]))
+    gradOutsideVecs = m_yhat[:, np.newaxis].dot(np.array([centerWordVec])) # dJ / dU = (yhat-y)v_c
     
     ### END YOUR CODE
 
@@ -115,9 +115,10 @@ def negSamplingLossAndGradient(
     outside_vector = outsideVectors[outsideWordIdx]
     neg_vector = outsideVectors[negSampleWordIndices]
 
-    val_outside  = outside_vector.dot(centerWordVec)
-    val_negative = neg_vector.dot(centerWordVec)
+    val_outside  = outside_vector.dot(centerWordVec) # u_o^T*v_c
+    val_negative = neg_vector.dot(centerWordVec) # -u_k^T*v_c
 
+    # 시그모이드
     p_outside  = sigmoid(val_outside)
     p_negative = sigmoid(- val_negative)
 
